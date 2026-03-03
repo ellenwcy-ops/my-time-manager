@@ -99,6 +99,40 @@
             <div class="empty-desc">把今天最重要的 1 件事写下来，然后开始 25 分钟专注。</div>
           </div>
         </section>
+
+        <section class="card span-2" aria-label="分享与二维码">
+          <div class="card-head">
+            <h2 class="card-title">分享</h2>
+            <div class="card-hint">扫码在手机上打开</div>
+          </div>
+
+          <div class="share">
+            <div class="share-row">
+              <label class="sr-only" for="shareUrl">分享链接</label>
+              <input class="input" id="shareUrl" type="url" inputmode="url" placeholder="粘贴一个可访问的链接…" />
+              <button class="btn" id="genQrBtn" type="button">生成二维码</button>
+            </div>
+
+            <div class="share-actions">
+              <button class="btn subtle" id="copyLinkBtn" type="button">复制链接</button>
+              <button class="btn subtle" id="shareBtn" type="button">手机一键分享</button>
+              <span class="pill share-pill" id="shareHint" aria-live="polite"></span>
+            </div>
+
+            <div class="qr">
+              <div class="qr-frame" aria-label="二维码">
+                <img id="qrImg" alt="二维码" />
+              </div>
+              <div class="qr-note">
+                <div class="qr-title">使用说明</div>
+                <div class="qr-desc">
+                  如果你现在是直接双击打开（<span class="mono">file://</span>），别人扫码是打不开的。想让别人能访问，
+                  你需要把网页部署到线上（例如 GitHub Pages），或者在同一个 Wi‑Fi 下用本机开启一个小服务。
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
       </section>
 
       <footer class="footer">

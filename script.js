@@ -318,6 +318,98 @@
   const clearCompletedBtn = $("#clearCompletedBtn");
   const clearAllBtn = $("#clearAllBtn");
 
+  // ====== 分享 / 二维码 ======
+  const shareUrlInput = $("#shareUrl");
+  const genQrBtn = $("#genQrBtn");
+  const qrImg = $("#qrImg");
+  const copyLinkBtn = $("#copyLinkBtn");
+  const shareBtn = $("#shareBtn");
+  const shareHint = $("#shareHint");
+
+  function setShareHint(text) {
+    if (!shareHint) return;
+    shareHint.textContent = text;
+  }
+
+  function getDefaultShareUrl() {
+    try {
+      return window.location.href;
+    } catch {
+      return "";
+    }
+  }
+
+  function normalizeUrl(raw) {
+    const v = String(raw || "").trim();
+    if (!v) return "";
+    return v;
+  }
+
+  function isFileUrl(url) {
+    return /^file:\/\//i.test(url);
+  }
+
+  function buildQrImageUrl(data) {
+    // 纯前端方案：用公开的二维码图片生成接口（无需额外库）
+    // 注意：二维码内容必须是“可被手机访问的链接”。file:// 本地路径无法被别人访问。
+    const encoded = encodeURIComponent(data);
+    return `https://api.qrserver.com/v1/create-qr-code/?size=240x240&margin=10&data=${encoded}`;
+  }
+
+  function generateQrFromInput() {
+    const url = normalizeUrl(shareUrlInput?.value || "");
+    const effectiveUrl = url || getDefaultShareUrl();
+    if (shareUrlInput && !url) shareUrlInput.value = effectiveUrl;
+
+    if (!qrImg) return;
+
+    if (!effectiveUrl) {
+      setShareHint("请输入一个链接");
+      qrImg.removeAttribute("src");
+      return;
+    }
+
+    if (isFileUrl(effectiveUrl)) {
+      setShareHint("检测到 file:// 本地打开：别人扫码无法访问。请先部署或开启本机服务。");
+    } else {
+      setShareHint("二维码已生成，手机扫码即可打开");
+    }
+
+    qrImg.src = buildQrImageUrl(effectiveUrl);
+  }
+
+  async function copyShareLink() {
+    const url = normalizeUrl(shareUrlInput?.value || "") || getDefaultShareUrl();
+    if (!url) return;
+    try {
+      await navigator.clipboard.writeText(url);
+      setShareHint("已复制链接");
+    } catch {
+      // 兼容不支持 clipboard 的环境
+      const ok = window.prompt("复制下面的链接（手动长按复制）：", url);
+      if (ok != null) setShareHint("已打开复制框");
+    }
+  }
+
+  async function shareOnMobile() {
+    const url = normalizeUrl(shareUrlInput?.value || "") || getDefaultShareUrl();
+    if (!url) return;
+    if (!navigator.share) {
+      setShareHint("当前浏览器不支持一键分享（可用“复制链接”）");
+      return;
+    }
+    try {
+      await navigator.share({
+        title: "Time Manager",
+        text: "来试试这个番茄钟 + 待办清单",
+        url,
+      });
+      setShareHint("已调起系统分享");
+    } catch {
+      setShareHint("已取消分享");
+    }
+  }
+
   /** @type {{id:string,text:string,done:boolean,createdAt:number}[]} */
   let todos = load(STORAGE_KEYS.todos, []);
   if (!Array.isArray(todos)) todos = [];
@@ -429,5 +521,20 @@
   // 初始渲染
   renderAll();
   renderTodos();
+
+  // 分享：初始化
+  if (shareUrlInput) shareUrlInput.value = getDefaultShareUrl();
+  if (genQrBtn) genQrBtn.addEventListener("click", generateQrFromInput);
+  if (copyLinkBtn) copyLinkBtn.addEventListener("click", copyShareLink);
+  if (shareBtn) shareBtn.addEventListener("click", shareOnMobile);
+  if (shareUrlInput) {
+    shareUrlInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        generateQrFromInput();
+      }
+    });
+  }
+  generateQrFromInput();
 })();
 

@@ -55,10 +55,10 @@ a {
   min-height: 100%;
   width: min(1040px, calc(100% - 40px));
   margin: 0 auto;
-  padding: 28px 0 22px;
+  padding: 18px 0 16px;
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 14px;
 }
 
 .topbar {
@@ -131,9 +131,13 @@ a {
 
 .grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
+  grid-template-columns: 1fr;
+  gap: 12px;
   align-items: start;
+}
+
+.span-2 {
+  grid-column: 1 / -1;
 }
 
 .card {
@@ -142,11 +146,11 @@ a {
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.04));
   box-shadow: var(--shadow);
   backdrop-filter: blur(14px);
-  padding: 18px;
+  padding: 16px;
   display: flex;
   flex-direction: column;
   gap: 16px;
-  min-height: 420px;
+  min-height: unset;
 }
 
 .card-head {
@@ -179,7 +183,7 @@ a {
 }
 
 .timer-ring {
-  width: min(340px, 100%);
+  width: min(300px, 100%);
   aspect-ratio: 1 / 1;
   border-radius: 999px;
   display: grid;
@@ -240,6 +244,7 @@ a {
   gap: 10px;
   justify-content: center;
   width: 100%;
+  flex-wrap: wrap;
 }
 
 .btn {
@@ -247,7 +252,7 @@ a {
   border: 1px solid var(--border);
   background: rgba(255, 255, 255, 0.06);
   color: var(--text);
-  padding: 10px 14px;
+  padding: 12px 14px;
   border-radius: 12px;
   font-weight: 650;
   letter-spacing: 0.2px;
@@ -281,6 +286,10 @@ a {
 
 .btn.primary:hover {
   background: rgba(255, 255, 255, 0.86);
+}
+
+.timer-actions .btn {
+  flex: 1 1 140px;
 }
 
 .btn.subtle {
@@ -347,6 +356,15 @@ kbd {
 .todo-add {
   display: flex;
   gap: 10px;
+  flex-wrap: wrap;
+}
+
+.todo-add .input {
+  flex: 1 1 220px;
+}
+
+.todo-add .btn {
+  flex: 1 0 120px;
 }
 
 .input {
@@ -535,17 +553,19 @@ kbd {
 
 .toast-host {
   position: fixed;
-  right: 18px;
-  bottom: 18px;
+  left: 12px;
+  right: 12px;
+  bottom: 12px;
   z-index: 40;
   display: flex;
   flex-direction: column;
   gap: 10px;
+  pointer-events: none;
 }
 
 .completion-toast {
-  min-width: 260px;
-  max-width: 320px;
+  width: 100%;
+  max-width: 520px;
   border-radius: 16px;
   padding: 14px 14px 12px;
   border: 1px solid rgba(255, 255, 255, 0.16);
@@ -556,6 +576,7 @@ kbd {
   transform: translateY(6px);
   opacity: 0;
   animation: toast-in 160ms ease-out forwards;
+  pointer-events: auto;
 }
 
 .completion-toast-header {
@@ -631,15 +652,123 @@ kbd {
   }
 }
 
-@media (max-width: 860px) {
+/* ====== 分享 / 二维码 ====== */
+.share {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.share-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.share-row .input {
+  flex: 1 1 260px;
+}
+
+.share-row .btn {
+  flex: 1 0 140px;
+}
+
+.share-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.share-pill {
+  flex: 1 1 160px;
+  justify-content: center;
+}
+
+.qr {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  align-items: start;
+}
+
+.qr-frame {
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(0, 0, 0, 0.18);
+  padding: 14px;
+  display: grid;
+  place-items: center;
+}
+
+.qr-frame img {
+  width: min(240px, 72vw);
+  height: auto;
+  border-radius: 14px;
+  background: #ffffff;
+  display: block;
+}
+
+.qr-note {
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  background: rgba(255, 255, 255, 0.03);
+  padding: 14px;
+}
+
+.qr-title {
+  font-weight: 680;
+  letter-spacing: 0.2px;
+  font-size: 13px;
+  margin-bottom: 6px;
+}
+
+.qr-desc {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.mono {
+  font-family:
+    ui-monospace,
+    SFMono-Regular,
+    Menlo,
+    Monaco,
+    Consolas,
+    "Liberation Mono",
+    "Courier New",
+    monospace;
+}
+
+/* 大屏时变为双列，但仍保持移动端优先 */
+@media (min-width: 940px) {
+  .app {
+    padding: 28px 0 22px;
+    gap: 18px;
+  }
   .grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
   }
   .card {
-    min-height: unset;
+    padding: 18px;
   }
   .timer-ring {
-    width: min(320px, 100%);
+    width: min(340px, 100%);
+  }
+  .toast-host {
+    left: auto;
+    right: 18px;
+    bottom: 18px;
+    width: auto;
+  }
+  .completion-toast {
+    width: auto;
+    max-width: 320px;
+  }
+  .qr {
+    grid-template-columns: 320px 1fr;
   }
 }
 
