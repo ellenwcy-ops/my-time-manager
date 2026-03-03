@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Time Manager Pro</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <main class="app" aria-label="时间管理工具">
+      <header class="topbar">
+        <div class="brand">
+          <div class="logo" aria-hidden="true"></div>
+          <div class="brand-text">
+            <div class="brand-title">Time Manager</div>
+            <div class="brand-subtitle">番茄钟 + 待办清单</div>
+          </div>
+        </div>
+        <div class="meta">
+          <span class="pill" id="todayLabel" aria-label="今天日期"></span>
+        </div>
+      </header>
+
+      <section class="grid">
+        <section class="card" aria-label="番茄钟">
+          <div class="card-head">
+            <h2 class="card-title">番茄钟</h2>
+            <div class="card-hint">25 分钟专注 / 随时暂停</div>
+          </div>
+
+          <div class="timer">
+            <div class="timer-ring" role="img" aria-label="倒计时进度">
+              <svg class="ring" viewBox="0 0 120 120" aria-hidden="true">
+                <circle class="ring-track" cx="60" cy="60" r="52"></circle>
+                <circle class="ring-progress" cx="60" cy="60" r="52"></circle>
+              </svg>
+              <div class="timer-core">
+                <div class="time" id="timeText" aria-live="polite">25:00</div>
+                <div class="status" id="timerStatus">准备开始</div>
+              </div>
+            </div>
+
+            <div class="timer-actions">
+              <button class="btn primary" id="startPauseBtn" type="button">开始</button>
+              <button class="btn" id="resetBtn" type="button">重置</button>
+            </div>
+
+            <div class="timer-footer">
+              <div class="kv">
+                <div class="k">本轮</div>
+                <div class="v"><span id="sessionCount">0</span> 次</div>
+              </div>
+              <div class="divider" aria-hidden="true"></div>
+              <div class="kv">
+                <div class="k">快捷</div>
+                <div class="v">
+                  <kbd>Space</kbd> 开始/暂停
+                  <span class="muted">·</span>
+                  <kbd>R</kbd> 重置
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="card" aria-label="待办事项">
+          <div class="card-head">
+            <h2 class="card-title">待办</h2>
+            <div class="card-hint">极简清单，专注今天最重要的事</div>
+          </div>
+
+          <form class="todo-add" id="todoForm" autocomplete="off">
+            <label class="sr-only" for="todoInput">添加任务</label>
+            <input
+              class="input"
+              id="todoInput"
+              type="text"
+              placeholder="输入任务后回车…"
+              maxlength="120"
+              required
+            />
+            <button class="btn" type="submit">添加</button>
+          </form>
+
+          <div class="todo-toolbar" aria-label="待办工具栏">
+            <div class="summary">
+              <span class="pill" id="todoSummary">0 项</span>
+            </div>
+            <div class="toolbar-actions">
+              <button class="btn subtle" id="clearCompletedBtn" type="button">清除已完成</button>
+              <button class="btn subtle" id="clearAllBtn" type="button">清空</button>
+            </div>
+          </div>
+
+          <ul class="todo-list" id="todoList" aria-label="任务列表"></ul>
+
+          <div class="empty" id="emptyState" hidden>
+            <div class="empty-title">暂无任务</div>
+            <div class="empty-desc">把今天最重要的 1 件事写下来，然后开始 25 分钟专注。</div>
+          </div>
+        </section>
+      </section>
+
+      <footer class="footer">
+        <span class="muted">本页面纯前端实现，数据仅保存在你的浏览器本地。</span>
+      </footer>
+    </main>
+
+    <script src="./script.js"></script>
+  </body>
+</html>
+
